@@ -38,7 +38,7 @@ var (
 
 // Conn represents a WebSocket connection.
 type Conn struct {
-	conn     *websocket.Conn
+	Conn     *websocket.Conn
 	settings Settings
 }
 
@@ -61,7 +61,7 @@ func Dial(address string, password string, options ...Option) (*Conn, error) {
 		return nil, fmt.Errorf("webrcon: %w", err)
 	}
 
-	client := Conn{conn: conn, settings: settings}
+	client := Conn{Conn: conn, settings: settings}
 
 	return &client, nil
 }
@@ -106,27 +106,27 @@ func (c *Conn) Execute(command string) (string, error) {
 
 // LocalAddr returns the local network address.
 func (c *Conn) LocalAddr() net.Addr {
-	return c.conn.LocalAddr()
+	return c.Conn.LocalAddr()
 }
 
 // RemoteAddr returns the remote network address.
 func (c *Conn) RemoteAddr() net.Addr {
-	return c.conn.RemoteAddr()
+	return c.Conn.RemoteAddr()
 }
 
 // Close closes the connection.
 func (c *Conn) Close() error {
-	return c.conn.Close()
+	return c.Conn.Close()
 }
 
 func (c *Conn) write(data []byte) error {
 	if c.settings.deadline != 0 {
-		if err := c.conn.SetWriteDeadline(time.Now().Add(c.settings.deadline)); err != nil {
+		if err := c.Conn.SetWriteDeadline(time.Now().Add(c.settings.deadline)); err != nil {
 			return fmt.Errorf("webrcon: %w", err)
 		}
 	}
 
-	if err := c.conn.WriteMessage(websocket.TextMessage, data); err != nil {
+	if err := c.Conn.WriteMessage(websocket.TextMessage, data); err != nil {
 		return fmt.Errorf("webrcon: %w", err)
 	}
 
@@ -135,12 +135,12 @@ func (c *Conn) write(data []byte) error {
 
 func (c *Conn) read() ([]byte, error) {
 	if c.settings.deadline != 0 {
-		if err := c.conn.SetReadDeadline(time.Now().Add(c.settings.deadline)); err != nil {
+		if err := c.Conn.SetReadDeadline(time.Now().Add(c.settings.deadline)); err != nil {
 			return nil, fmt.Errorf("webrcon: %w", err)
 		}
 	}
 
-	_, p, err := c.conn.ReadMessage()
+	_, p, err := c.Conn.ReadMessage()
 	if err != nil {
 		return p, fmt.Errorf("webrcon: %w", err)
 	}
