@@ -1,4 +1,4 @@
-module github.com/gorcon/websocket
+module github.com/mariorodriguespt/rust-rcon-websocket
 
 go 1.21
 
